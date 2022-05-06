@@ -42,10 +42,10 @@ exports.updateSauce = (req, res) => {
   if (!sauceId) {
     return res.status(400).json({ message: "missing parameters" });
   }
-  // transforme en objet JS exploitable
+
   const sauceObject = req.file
     ? {
-        // si une image est modifiée
+        // si une image est modifiée => transforme en objet JS exploitable
         ...JSON.parse(req.body.sauce),
         imageUrl: `${req.protocol}://${req.get("host")}/images/${
           req.file.filename
@@ -61,24 +61,20 @@ exports.updateSauce = (req, res) => {
     .catch((err) => res.status(500).json(err));
 };
 
-exports.deleteSauce = (req, res) => {
+exports.deleteSauce = async (req, res) => {
   // Vérification si id sélectionné est cohérent
   const sauceId = req.params.id;
   if (!sauceId) {
     return res.status(400).json({ message: "missing parameters" });
   }
   // recherche la sauce pour XX l'image du serveur
-  Sauce.findOne({ _id: req.params.id })
-    .then((sauce) => {
-      const filename = sauce.imageUrl.split("/images/")[1]; // Nom du fichier a supprimer
-      fs.unlink(`images/${filename}`, () => {
-        // supprime l'image de notre fichier et callback pour supprimer la sauce
-        Sauce.deleteOne({ _id: req.params.id })
-          .then(() => res.status(200).json({ message: "Sauce supprimée" }))
-          .catch((err) => res.status(500).json(err));
-      });
-    })
-    .catch((err) => res.status(500).json(err));
+  let sauce = await Sauce.findOne({ _id: req.params.id });
+  const filename = sauce.imageUrl.split("/images/")[1]; // Nom du fichier a supprimer
+  fs.unlink(`images/${filename}`, () => {     // supprime l'image de notre fichier et callback pour supprimer la sauce
+    Sauce.deleteOne({ _id: req.params.id })
+      .then(() => res.status(200).json({ message: "Sauce supprimée" }))
+      .catch((err) => res.status(500).json(err));
+  });
 };
 
 exports.likeSauce = (req, res) => {
