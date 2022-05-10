@@ -11,6 +11,6 @@ Depuis le dossier back, installez les différents packages nécessaires avec la 
 Puis lancer le serveur ```npm run dev``` .
 
 ## Gestion téléchargement des fichiers images
-Créeé un dossier _images_ dans le dossier back .
+Créez un dossier _images_ dans le dossier back .
 ## Installation du front-end
 Voir la doc sur :  https://github.com/OpenClassrooms-Student-Center/Web-Developer-P6
