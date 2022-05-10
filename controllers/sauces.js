@@ -21,7 +21,7 @@ exports.addSauces = (req, res) => {
   // Création de la nouvelle sauce
   const sauce = new Sauce({
     ...sauceObject,
-    imageUrl: `${req.protocol}://${req.get("host")}/images/${
+    imageUrl: `${req.protocol}://${req.get("host")}/images/${ //pour résoudre l'url exacte de notre image
       req.file.filename
     }`,
     likes: 0,
